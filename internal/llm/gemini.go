@@ -12,7 +12,9 @@ type Gemini struct {
 
 func New(apiKey string) (*Gemini, error) {
 
-	client, err := genai.NewClient(context.Background(), &genai.ClientConfig{
+	ctx := context.Background()
+
+	client, err := genai.NewClient(ctx, &genai.ClientConfig{
 		APIKey: apiKey,
 	})
 
@@ -27,11 +29,13 @@ func New(apiKey string) (*Gemini, error) {
 
 func (g *Gemini) Generate(prompt string) (string, error) {
 
+	ctx := context.Background()
+
 	resp, err := g.client.Models.GenerateContent(
-		context.Background(),
-		"gemini-1.5-flash",
+		ctx,
+		"gemini-2.5-flash",
 		genai.Text(prompt),
-		nil,
+						     nil,
 	)
 
 	if err != nil {
