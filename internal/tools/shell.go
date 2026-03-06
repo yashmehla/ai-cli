@@ -16,21 +16,41 @@ func (s ShellTool) Description() string {
 	return "run safe shell commands"
 }
 
-var allowed = []string{
+var allowedCommands = []string{
 	"ls",
 	"pwd",
 	"whoami",
 	"date",
+	"cat",
 }
 
-func allowedCommand(cmd string) bool {
+var blockedCommands = []string{
+	"rm",
+	"rmdir",
+	"unlink",
+	"mv",
+	"chmod",
+	"chown",
+	"sudo",
+	"dd",
+	"mkfs",
+}
 
-	for _, c := range allowed {
-		if cmd == c {
+func contains(list []string, item string) bool {
+	for _, v := range list {
+		if v == item {
 			return true
 		}
 	}
+	return false
+}
 
+func blocked(cmd string) bool {
+	for _, b := range blockedCommands {
+		if strings.Contains(cmd, b) {
+			return true
+		}
+	}
 	return false
 }
 
@@ -42,7 +62,11 @@ func (s ShellTool) Run(input string) (string, error) {
 		return "", errors.New("empty command")
 	}
 
-	if !allowedCommand(parts[0]) {
+	if blocked(input) {
+		return "", errors.New("command blocked for safety")
+	}
+
+	if !contains(allowedCommands, parts[0]) {
 		return "", errors.New("command not allowed")
 	}
 
