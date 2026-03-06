@@ -35,7 +35,7 @@ func (g *Gemini) Generate(prompt string) (string, error) {
 		ctx,
 		"gemini-2.5-flash",
 		genai.Text(prompt),
-						     nil,
+		nil,
 	)
 
 	if err != nil {

@@ -18,7 +18,7 @@ func NewHistory() *History {
 func (h *History) Add(role, content string) {
 
 	h.Messages = append(h.Messages, Message{
-		Role: role,
+		Role:    role,
 		Content: content,
 	})
 }
